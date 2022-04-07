@@ -53,6 +53,7 @@ export class LoginPage implements OnInit {
   }
 
   async onSubmit(provider: AuthProvider): Promise<void>{
+    const loading = await this.overlayService.loading();
     try{
       const credentials = await this.authService.authenticate({
         isSignIn: this.configs.isSignIn,
@@ -63,6 +64,11 @@ export class LoginPage implements OnInit {
       console.log('redirecting');
     } catch(e){
       console.log('Auth error: ', e);
+      this.overlayService.toast({
+        message: e.message
+      });
+    } finally{
+      loading.dismiss();
     }
   }
 
